@@ -29,3 +29,27 @@ export const registerUser = async ({ username, email, password, phone, avatarUrl
     email: newUser.email,
   };
 };
+
+export const loginUser = async ({ email, password }) => {
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    const error = new Error("Invalid email or password");
+    error.statusCode = 401;
+    throw error;
+  }
+
+  const isMatch = await bcrypt.compare(password, user.passwordHash);
+
+  if (!isMatch) {
+    const error = new Error("Invalid email or password");
+    error.statusCode = 401;
+    throw error;
+  }
+
+  return {
+    id: user._id,
+    username: user.username,
+    email: user.email,
+  };
+};

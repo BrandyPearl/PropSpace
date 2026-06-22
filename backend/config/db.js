@@ -1,4 +1,9 @@
 import mongoose from "mongoose";
+import dns from "dns";
+
+// Force Node to use Google's public DNS for resolving MongoDB Atlas SRV records,
+// since this machine's default DNS resolution doesn't work reliably with Node.
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 const connectDB = async () => {
   try {
